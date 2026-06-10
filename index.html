@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACL斷掉的大猩猩</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f3;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .page {
+      max-width: 420px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 2.5rem 1.75rem;
+      border: 0.5px solid #e0e0db;
+    }
+
+    .avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #f0f0ec;
+      border: 2px solid #ddd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 36px;
+    }
+
+    .name {
+      font-size: 20px;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 6px;
+      color: #1a1a1a;
+    }
+
+    .tagline {
+      font-size: 14px;
+      color: #777;
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 1.75rem;
+    }
+
+    .badge {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 0.5px solid #e0e0db;
+      color: #666;
+      background: #f8f8f6;
+    }
+
+    .divider {
+      border: none;
+      border-top: 0.5px solid #e8e8e4;
+      margin: 1.5rem 0;
+    }
+
+    .section-label {
+      font-size: 11px;
+      color: #aaa;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .story-line {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+      align-items: flex-start;
+    }
+
+    .story-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ddd;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .story-dot.active { background: #1D9E75; }
+
+    .story-text {
+      font-size: 14px;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+
+    .story-text span {
+      font-size: 13px;
+      color: #888;
+      display: block;
+      margin-top: 2px;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 0.75rem;
+    }
+
+    .stat-card {
+      background: #f8f8f6;
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .toggle-edit {
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 100%;
+      padding: 8px 0;
+      margin-bottom: 0.5rem;
+    }
+
+    .toggle-edit:hover { color: #666; }
+
+    .edit-panel {
+      background: #f8f8f6;
+      border-radius: 12px;
+      border: 0.5px solid #e0e0db;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+
+    .edit-panel.open { display: block; }
+
+    .edit-row-inline {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .edit-row { margin-bottom: 12px; }
+
+    .edit-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .edit-input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 0.5px solid #ddd;
+      background: #fff;
+      color: #1a1a1a;
+      font-size: 14px;
+    }
+
+    .password-row { margin-bottom: 12px; }
+
+    .save-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 0.5px solid #1D9E75;
+      background: transparent;
+      color: #1D9E75;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .save-btn:hover { background: #f0faf6; }
+
+    .error-msg {
+      font-size: 12px;
+      color: #e24b4a;
+      margin-top: 6px;
+      display: none;
+    }
+
+    .quote-block {
+      border-left: 2px solid #e0e0db;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .quote-text {
+      font-size: 14px;
+      color: #888;
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    .cta-btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border-radius: 12px;
+      border: 0.5px solid #ddd;
+      background: transparent;
+      color: #1a1a1a;
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      cursor: pointer;
+      margin-bottom: 10px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .cta-btn:hover { background: #f8f8f6; }
+
+    .cta-btn.primary {
+      border-color: #1D9E75;
+      color: #1D9E75;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      color: #bbb;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="avatar">🦍</div>
+    <p class="name">ACL斷掉的大猩猩</p>
+    <p class="tagline">復健中 · 升大一暑假爆讀高中化學 · 靠甜點續命<br>從 0勝0敗 走到重回球場</p>
+
+    <div class="badge-row">
+      <span class="badge">理工科系</span>
+      <span class="badge">ACL 復健</span>
+      <span class="badge">多益備考</span>
+      <span class="badge">球賽預測</span>
+      <span class="badge">ENTJ</span>
+    </div>
+
+    <hr class="divider">
+
+    <p class="section-label">我的故事</p>
+
+    <div class="story-line">
+      <div class="story-dot active"></div>
+      <div class="story-text">
+        前十字韌帶手術
+        <span>2026 年 6 月 12 日｜復健倒數計時開始</span>
+      </div>
+    </div>
+    <div class="story-line">
+      <div class="story-dot"></div>
+      <div class="story-text">
+        升大一暑假爆讀
+        <span>高中化學 ＋ 多益備考，同步復健</span>
+      </div>
+    </div>
+    <div class="story-line">
+      <div class="story-dot"></div>
+      <div class="story-text">
+        目標：轉組成功
+        <span>大一結束前完成</span>
+      </div>
+    </div>
+    <div class="story-line">
+      <div class="story-dot"></div>
+      <div class="story-text">
+        重回球場
+        <span>2027 年 6 月 · 終點畫面</span>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <p class="section-label">現在的狀態</p>
+    <div class="stat-row">
+      <div class="stat-card">
+        <p class="stat-label">球賽預測戰績</p>
+        <p class="stat-value" id="stat-record">0勝 0敗</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-label">復健第幾天</p>
+        <p class="stat-value" id="stat-day">D + 0</p>
+      </div>
+    </div>
+
+    <button class="toggle-edit" onclick="toggleEdit()">✎ 更新數據</button>
+
+    <div class="edit-panel" id="edit-panel">
+      <div class="password-row">
+        <label class="edit-label">密碼</label>
+        <input class="edit-input" type="password" id="input-password" placeholder="輸入你的密碼">
+        <p class="error-msg" id="error-msg">密碼錯誤</p>
+      </div>
+      <div class="edit-row-inline">
+        <div>
+          <label class="edit-label">勝場數</label>
+          <input class="edit-input" type="number" id="input-win" value="0" min="0">
+        </div>
+        <div>
+          <label class="edit-label">敗場數</label>
+          <input class="edit-input" type="number" id="input-lose" value="0" min="0">
+        </div>
+      </div>
+      <div class="edit-row">
+        <label class="edit-label">復健第幾天</label>
+        <input class="edit-input" type="number" id="input-day" value="0" min="0">
+      </div>
+      <button class="save-btn" onclick="saveStats()">儲存更新</button>
+    </div>
+
+    <hr class="divider">
+
+    <div class="quote-block">
+      <p class="quote-text">「或許踏出第一步，一切都會不同。」</p>
+    </div>
+
+    <a class="cta-btn primary" href="https://www.instagram.com/aclgorilla" target="_blank">追蹤 IG 看完整記錄 ↗</a>
+    <a class="cta-btn" href="https://www.instagram.com/aclgorilla" target="_blank">世界盃觀戰指南（免費索取）↗</a>
+
+    <p class="footer-text">有任何問題想聊，IG 私訊我</p>
+  </div>
+
+  <script>
+    const PASSWORD = "gorilla2026";
+
+    const saved = localStorage.getItem('aclgorilla-stats');
+    if (saved) {
+      const data = JSON.parse(saved);
+      document.getElementById('stat-record').textContent = data.win + '勝 ' + data.lose + '敗';
+      document.getElementById('stat-day').textContent = 'D + ' + data.day;
+      document.getElementById('input-win').value = data.win;
+      document.getElementById('input-lose').value = data.lose;
+      document.getElementById('input-day').value = data.day;
+    }
+
+    function toggleEdit() {
+      const panel = document.getElementById('edit-panel');
+      panel.classList.toggle('open');
+      document.getElementById('error-msg').style.display = 'none';
+      document.getElementById('input-password').value = '';
+    }
+
+    function saveStats() {
+      const pw = document.getElementById('input-password').value;
+      if (pw !== PASSWORD) {
+        document.getElementById('error-msg').style.display = 'block';
+        return;
+      }
+      const win = parseInt(document.getElementById('input-win').value) || 0;
+      const lose = parseInt(document.getElementById('input-lose').value) || 0;
+      const day = parseInt(document.getElementById('input-day').value) || 0;
+
+      document.getElementById('stat-record').textContent = win + '勝 ' + lose + '敗';
+      document.getElementById('stat-day').textContent = 'D + ' + day;
+
+      localStorage.setItem('aclgorilla-stats', JSON.stringify({ win, lose, day }));
+      document.getElementById('edit-panel').classList.remove('open');
+    }
+  </script>
+</body>
+</html>
